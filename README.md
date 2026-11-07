@@ -32,7 +32,7 @@ But otherwhise, feel free to use this component as is.
    https://smarthomespecialist.be/solaredge_callback.html
    ```
 
---> This is a simple static page that is place on a doamain I own. Feel free to use.
+--> This is a simple static page that is placed on a domain I own. Feel free to use.
 Your token data is not stored on the domain and stays private to you. If you want you can always host the html file on your own domain and use a different Redirect URI. If you do so you need to update references to this domain in the component's code too.
 
 5. Save **Client ID** and **Client Secret**
