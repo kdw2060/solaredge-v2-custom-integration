@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SolarEdge → Home Assistant</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f4f1ea;
+      --card: #fff;
+      --text: #1a1a1a;
+      --muted: #5c5c5c;
+      --accent: #0b6e4f;
+      --border: #d9d3c7;
+      --danger: #9b1c1c;
+      --ok: #0b6e4f;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #12141a;
+        --card: #1c2030;
+        --text: #f2f2f2;
+        --muted: #a8aebc;
+        --accent: #5dcea0;
+        --border: #2e3548;
+        --danger: #ff8e8e;
+        --ok: #5dcea0;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(11, 110, 79, 0.12), transparent 40%),
+        var(--bg);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 1.5rem;
+    }
+    main {
+      width: min(40rem, 100%);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+    }
+    h1 { margin: 0 0 0.5rem; font-size: 1.4rem; }
+    p { margin: 0 0 1rem; color: var(--muted); line-height: 1.45; }
+    .status {
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .status.ok { color: var(--ok); }
+    .status.err { color: var(--danger); }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+    textarea {
+      width: 100%;
+      min-height: 6.5rem;
+      resize: vertical;
+      border: 1px solid var(--border);
+      border-radius: 0.6rem;
+      padding: 0.75rem;
+      font: 0.85rem/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: transparent;
+      color: var(--text);
+    }
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 0.85rem;
+    }
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 0.65rem 1.1rem;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button.secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    ol { margin: 0; padding-left: 1.2rem; color: var(--muted); }
+    li { margin-bottom: 0.35rem; }
+    .meta { margin-top: 1.25rem; font-size: 0.85rem; color: var(--muted); }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>SolarEdge authorization</h1>
+    <p class="status" id="status">Reading redirect…</p>
+    <p>
+      Copy the full URL below and paste it into the Home Assistant SolarEdge setup
+      dialog. Authorization codes expire quickly — do this immediately.
+    </p>
+
+    <label for="callbackUrl">Redirect URL</label>
+    <textarea id="callbackUrl" readonly></textarea>
+
+    <div class="actions">
+      <button type="button" id="copyBtn">Copy URL</button>
+      <button type="button" class="secondary" id="copyCodeBtn">Copy code only</button>
+    </div>
+
+    <div class="meta">
+      <ol>
+        <li>Keep this tab open until Home Assistant finishes setup.</li>
+        <li>In HA, paste the URL into the SolarEdge “paste redirect” field.</li>
+        <li>You can close this tab after HA confirms success.</li>
+      </ol>
+      <p style="margin-top:1rem">
+        Expected path: <code>/solaredge_callback.html</code> on
+        <code>smarthomespecialist.be</code>
+      </p>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      const status = document.getElementById("status");
+      const field = document.getElementById("callbackUrl");
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get("code");
+      const siteId = params.get("site_id");
+      const error = params.get("error");
+      const fullUrl = window.location.href;
+
+      field.value = fullUrl;
+
+      if (error) {
+        status.textContent = "Authorization was rejected: " + error;
+        status.className = "status err";
+      } else if (code) {
+        status.textContent = siteId
+          ? "Success — code received for site " + siteId + "."
+          : "Success — authorization code received.";
+        status.className = "status ok";
+      } else {
+        status.textContent = "No authorization code found in this URL.";
+        status.className = "status err";
+      }
+
+      async function copy(text, label) {
+        try {
+          await navigator.clipboard.writeText(text);
+          status.textContent = label + " copied.";
+          status.className = "status ok";
+        } catch (err) {
+          field.focus();
+          field.select();
+          status.textContent = "Select the text and copy it manually (Ctrl/Cmd+C).";
+          status.className = "status err";
+        }
+      }
+
+      document.getElementById("copyBtn").addEventListener("click", function () {
+        copy(fullUrl, "URL");
+      });
+      document.getElementById("copyCodeBtn").addEventListener("click", function () {
+        if (!code) {
+          status.textContent = "No code available to copy.";
+          status.className = "status err";
+          return;
+        }
+        copy(code, "Code");
+      });
+    })();
+  </script>
+</body>
+</html>

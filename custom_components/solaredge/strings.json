@@ -1,0 +1,214 @@
+{
+  "application_credentials": {
+    "description": "Create a Site Access application in the SolarEdge Developer Console ({developer_console_url}). Enable the SITE_DATA and DEVICE_DATA scopes and register this exact redirect URI: {redirect_url}. Upload solaredge_callback.html to that path on your website. Copy the client ID and client secret into Home Assistant."
+  },
+  "config": {
+    "abort": {
+      "already_configured": "This SolarEdge site is already configured. Open the existing entry and choose Reauthenticate instead of adding it again.",
+      "cannot_connect": "Failed to connect to SolarEdge.",
+      "oauth_unauthorized": "OAuth authorization failed. Try again and sign in with the site owner account.",
+      "site_not_active": "The selected SolarEdge site is not active.",
+      "wrong_account": "The authenticated account does not provide access to this SolarEdge site."
+    },
+    "error": {
+      "already_configured": "This SolarEdge site is already configured. Open the existing entry and choose Reauthenticate instead of adding it again.",
+      "cannot_connect": "Failed to connect to SolarEdge.",
+      "invalid_auth": "Invalid authentication.",
+      "invalid_redirect_url": "That address has no usable authorization code. Open the authorize link again and paste the new redirect URL immediately.",
+      "oauth_failed": "SolarEdge refused the authorization code. Codes are single-use and expire quickly — authorize again and paste the new URL right away.",
+      "oauth_rejected": "SolarEdge authorization was rejected.",
+      "unknown": "Unexpected error.",
+      "wrong_account": "The authorized site does not match the site ID entered in this setup."
+    },
+    "step": {
+      "paste": {
+        "data": {
+          "redirect_url": "Redirect URL from the browser"
+        },
+        "data_description": {
+          "redirect_url": "After approving access, copy the full address from the browser (it starts with {redirect_url}?code=…) and paste it here."
+        },
+        "description": "1. Open this authorize link in a new tab: {authorize_url}\n2. Sign in with the site owner SolarEdge account and approve access.\n3. You land on {redirect_url} — copy that full URL and paste it below immediately (codes expire quickly).",
+        "title": "Authorize SolarEdge"
+      },
+      "pick_implementation": {
+        "title": "Pick authentication method"
+      },
+      "reauth_confirm": {
+        "description": "SolarEdge retired site API keys. Reconnect site {site_id} with a Site Access OAuth application.",
+        "title": "Reauthenticate SolarEdge"
+      },
+      "reconfigure": {
+        "data": {
+          "password": "Password",
+          "username": "Username"
+        },
+        "data_description": {
+          "password": "Required if username is provided",
+          "username": "Optional, used only for module-level production statistics"
+        },
+        "description": "Update the optional module-level web account credentials for site {site_id}.",
+        "sections": {
+          "web_auth": {
+            "data": {
+              "password": "Password",
+              "username": "Username"
+            },
+            "description": "Optional legacy web portal credentials for non-real-time module-level production statistics",
+            "name": "Module statistics"
+          }
+        },
+        "title": "Reconfigure SolarEdge"
+      },
+      "user": {
+        "data": {
+          "password": "Password",
+          "site_id": "The SolarEdge site ID",
+          "username": "Username"
+        },
+        "data_description": {
+          "password": "Required if username is provided",
+          "site_id": "The numeric site ID shown in the SolarEdge monitoring portal",
+          "username": "Optional, used only for module-level production statistics"
+        },
+        "description": "Enter the site ID. You will authorize Home Assistant through SolarEdge in the next step. Sign in with the SolarEdge site owner account.",
+        "sections": {
+          "web_auth": {
+            "data": {
+              "password": "Password",
+              "username": "Username"
+            },
+            "description": "Optional legacy web portal credentials for non-real-time module-level production statistics",
+            "name": "Module statistics"
+          }
+        },
+        "title": "Set up your SolarEdge integration"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "batteries": {
+        "name": "Batteries"
+      },
+      "battery_charge_energy": {
+        "name": "Charge energy today"
+      },
+      "battery_discharge_energy": {
+        "name": "Discharge energy today"
+      },
+      "battery_state_of_charge": {
+        "name": "State of charge"
+      },
+      "consumption_energy": {
+        "name": "Consumed energy"
+      },
+      "current_power": {
+        "name": "Current power"
+      },
+      "energy_this_month": {
+        "name": "Energy this month"
+      },
+      "energy_this_year": {
+        "name": "Energy this year"
+      },
+      "energy_today": {
+        "name": "Energy today"
+      },
+      "feedin_energy": {
+        "name": "Exported energy"
+      },
+      "gateways": {
+        "name": "Gateways"
+      },
+      "grid_flow_direction": {
+        "name": "Grid flow direction",
+        "state": {
+          "export": "Export",
+          "import": "Import"
+        }
+      },
+      "grid_power": {
+        "name": "Grid power"
+      },
+      "inverters": {
+        "name": "Inverters"
+      },
+      "lifetime_energy": {
+        "name": "Lifetime energy"
+      },
+      "meters": {
+        "name": "Meters"
+      },
+      "power_consumption": {
+        "name": "Power consumption"
+      },
+      "production_energy": {
+        "name": "Produced energy"
+      },
+      "purchased_energy": {
+        "name": "Imported energy"
+      },
+      "selfconsumption_energy": {
+        "name": "Self-consumed energy"
+      },
+      "sensors": {
+        "name": "Sensors"
+      },
+      "site_details": {
+        "name": "Site details"
+      },
+      "solar_power": {
+        "name": "Solar power"
+      },
+      "storage_charge_energy": {
+        "name": "Storage charge energy today"
+      },
+      "storage_discharge_energy": {
+        "name": "Storage discharge energy today"
+      },
+      "storage_flow_direction": {
+        "name": "Storage flow direction",
+        "state": {
+          "charge": "Charge",
+          "discharge": "Discharge"
+        }
+      },
+      "storage_level": {
+        "name": "Storage level"
+      },
+      "storage_power": {
+        "name": "Storage power"
+      }
+    }
+  },
+  "exceptions": {
+    "api_request_failed": {
+      "message": "Error requesting {service} data: {status}"
+    },
+    "cannot_retrieve_details": {
+      "message": "Could not retrieve details from SolarEdge API"
+    },
+    "data_unavailable": {
+      "message": "{service} data not available from API"
+    },
+    "missing_data": {
+      "message": "Missing {service} data, skipping update"
+    },
+    "missing_details": {
+      "message": "Missing details data in SolarEdge response"
+    },
+    "monthly_credit_limit": {
+      "message": "The SolarEdge Developer Platform monthly API credit limit has been reached."
+    },
+    "oauth_migration_required": {
+      "message": "Reconnect SolarEdge to migrate this site from the retired API key to OAuth."
+    },
+    "rate_limit": {
+      "message": "The SolarEdge Developer Platform per-minute API limit has been reached."
+    },
+    "site_not_active": {
+      "message": "The SolarEdge site is not active"
+    }
+  }
+}
