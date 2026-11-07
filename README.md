@@ -23,7 +23,7 @@ But otherwhise, feel free to use this component as is.
 
 ### 1. Create a SolarEdge Site Access app
 
-1. Go to [developer.solaredge.com](https://developer.solaredge.com/)
+1. Go to [developer.solaredge.com](https://developer.solaredge.com/) and create an account. There is a free tier available.
 2. Create an application: **Site Access**, service **Monitoring**, OAuth 2.0
 3. Scopes: **`SITE_DATA`** and **`DEVICE_DATA`**
 4. Redirect URI (exact):
@@ -32,8 +32,8 @@ But otherwhise, feel free to use this component as is.
    https://smarthomespecialist.be/solaredge_callback.html
    ```
 
---> This is a simple static page that is place on a doamain i own. Feel free to use.
-Your token data is not stored on the domain and stays private to you. If you want you can always host the html file on your own domain and use a different Redirect URI
+--> This is a simple static page that is place on a doamain I own. Feel free to use.
+Your token data is not stored on the domain and stays private to you. If you want you can always host the html file on your own domain and use a different Redirect URI. If you do so you need to update references to this domain in the component's code too.
 
 5. Save **Client ID** and **Client Secret**
 
